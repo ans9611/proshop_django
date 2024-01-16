@@ -13,8 +13,7 @@ from rest_framework import status
 
 @api_view(['GET'])
 def getProducts(request):
-    query = request.query_params.get('keyword')
-    if query == None:
+    if (query := request.query_params.get('keyword')) == None:
         query = ''
 
     products = Product.objects.filter(
@@ -120,8 +119,7 @@ def createProductReview(request, pk):
     data = request.data
 
     # 1 - Review already exists
-    alreadyExists = product.review_set.filter(user=user).exists()
-    if alreadyExists:
+    if alreadyExists := product.review_set.filter(user=user).exists():
         content = {'detail': 'Product already reviewed'}
         return Response(content, status=status.HTTP_400_BAD_REQUEST)
 
